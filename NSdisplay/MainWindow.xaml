@@ -8,5 +8,24 @@
         Title="MainWindow" Height="450" Width="800"
         WindowState="Maximized" WindowStyle="None">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <Viewbox Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="5">
+            <StackPanel Background="#000066" Width="800" Height="71">
+                <TextBlock Foreground="White" Margin="10,10,5,5" FontWeight="DemiBold"  FontSize="30">Station hier</TextBlock>
+            </StackPanel>
+        </Viewbox> 
     </Grid>
 </Window>
