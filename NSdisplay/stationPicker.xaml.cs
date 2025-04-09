@@ -40,7 +40,6 @@ namespace NSdisplay
             while (reader.Read())
             {
                 stations.Add(new station { id = reader.GetInt32(0), name = reader.GetString(1) });
-                text.Text = reader.GetString(1);
             }
             reader.Close();
             stations = stations.OrderBy(s => s.name).ToList();
@@ -49,11 +48,18 @@ namespace NSdisplay
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            int stationID = (int)selectedStation.SelectedValue;
-            MainWindow mainwindow = new MainWindow(stationID);
-            mainwindow.Show();
-            con.Close();
-            Close();
+            try
+            {
+                int stationID = (int)selectedStation.SelectedValue;
+                MainWindow mainwindow = new MainWindow(stationID);
+                mainwindow.Show();
+                con.Close();
+                Close();
+            }
+            catch (NullReferenceException)
+            {
+                MessageBox.Show("Station niet gevonden");
+            }
         }
 
         private void selectedStation_PreviewTextInput(object sender, TextCompositionEventArgs e)
