@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using MySql.Data.MySqlClient;
-using static System.Collections.Specialized.BitVector32;
+using NSdisplay.Services.Database;
 
 namespace NSdisplay
 {
@@ -27,27 +27,24 @@ namespace NSdisplay
             public int id { get; set; }
             public string name { get; set; }
         }
-        public static DBConnection DBcon = DBConnection.Instance();
+        public static MySqlConnection con = DbConnection.GetConnection();
+
         public stationPicker()
         {
+            con.Open();
             InitializeComponent();
-            DBcon.Server = "localhost";
-            DBcon.DatabaseName = "ns";
-            DBcon.UserName = "root";
             List<station> stations = new List<station>();
-            if (DBcon.IsConnect())
+            string query = "SELECT id, name FROM netherlands_train_stations";
+            var cmd = new MySqlCommand(query, con);
+            var reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                string query = "SELECT id, name FROM netherlands_train_stations";
-                var cmd = new MySqlCommand(query, DBcon.Connection);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read()) {
-                    stations.Add(new station { id = reader.GetInt32(0), name = reader.GetString(1) });
-                    text.Text = reader.GetString(1);
-                }
-                reader.Close();
-                stations = stations.OrderBy(s => s.name).ToList();
-                selectedStation.ItemsSource = stations;
+                stations.Add(new station { id = reader.GetInt32(0), name = reader.GetString(1) });
+                text.Text = reader.GetString(1);
             }
+            reader.Close();
+            stations = stations.OrderBy(s => s.name).ToList();
+            selectedStation.ItemsSource = stations;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -55,6 +52,7 @@ namespace NSdisplay
             int stationID = (int)selectedStation.SelectedValue;
             MainWindow mainwindow = new MainWindow(stationID);
             mainwindow.Show();
+            con.Close();
             Close();
         }
 
