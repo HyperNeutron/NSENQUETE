@@ -31,7 +31,6 @@ namespace NSdisplay
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
             var reader = cmd.ExecuteReader();
-            station.Text = "bbb";
             if (reader.Read())
             {
                 stationName = reader.GetString(1);
