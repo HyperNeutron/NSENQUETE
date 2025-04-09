@@ -7,8 +7,24 @@
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
     <Grid>
-        <TextBlock FontSize="25" x:Name="text">hi</TextBlock>
-        <ComboBox x:Name="selectedStation" IsTextSearchEnabled="True" IsEditable="True" PreviewTextInput="selectedStation_PreviewTextInput" Height="50" Width="250" ItemsSource="{Binding Path=stations}"  DisplayMemberPath="name" SelectedValuePath="id" SelectedValue="{Binding Path=station}"></ComboBox>
-        <Button Height="25" Width="200" Margin="0,150,0,0" Click="Button_Click">send</Button>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Background="#000066" Grid.ColumnSpan="5" Grid.Row="0">
+            <TextBlock Foreground="White" TextAlignment="Center" Margin="0,12,0,0" FontSize="40" FontWeight="DemiBold" >Selecteer station</TextBlock>
+        </StackPanel>
+        <ComboBox x:Name="selectedStation" Grid.Row="2" Grid.Column="2" IsTextSearchEnabled="True" IsEditable="True" PreviewTextInput="selectedStation_PreviewTextInput" Height="30" Width="250" FontSize="20" ItemsSource="{Binding Path=stations}"  DisplayMemberPath="name" SelectedValuePath="id" SelectedValue="{Binding Path=station}"></ComboBox>
+        <Button Grid.Row="3" Grid.Column="2" BorderThickness="0" Background="#000066" Foreground="White" FontSize="15" FontWeight="DemiBold" Height="25" Width="200" Margin="0,0,0,0" Click="Button_Click">Selecteer</Button>
     </Grid>
 </Window>
