@@ -27,14 +27,36 @@ namespace NSdisplay
             int stationID = id;
             string stationName;
             InitializeComponent();
-            string query = "SELECT id, name FROM netherlands_train_stations WHERE id = @stationID";
+            string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, haskiosk FROM netherlands_train_stations WHERE id = @stationID";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
             var reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                stationName = reader.GetString(1);
+                stationName = reader.GetString(0);
                 station.Text = stationName;
+                var disabledColor = new Color();
+                disabledColor.R = 0;
+                disabledColor.G = 0;
+                disabledColor.B = 77;
+                disabledColor.A = 255;
+                var disabledBrush = new SolidColorBrush(disabledColor);
+                if (!reader.GetBoolean(1))
+                {
+                    elevator.Foreground = disabledBrush;
+                }
+                if (!reader.GetBoolean(2))
+                {
+                    wheelchair.Foreground = disabledBrush;
+                }
+                if (!reader.GetBoolean(3))
+                {
+                    toilet.Foreground = disabledBrush;
+                }
+                if (!reader.GetBoolean(4))
+                {
+                    kiosk.Foreground = disabledBrush;
+                }
             }
             reader.Close();
 
