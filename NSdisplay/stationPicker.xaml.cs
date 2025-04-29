@@ -12,7 +12,7 @@ namespace NSdisplay
     public partial class stationPicker : Window
     {
         public static MySqlConnection con = DbConnection.GetConnection();
-
+        int stationID;
         public stationPicker()
         {
             con.Open();
@@ -28,11 +28,51 @@ namespace NSdisplay
             reader.Close();
             stations = stations.OrderBy(s => s.name).ToList();
             selectedStation.ItemsSource = stations;
+            selectedStation.KeyDown += SelectedStation_KeyDown;
+        }
+
+        private void SelectedStation_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                if (selectedStation.SelectedValue != null && isValidStation((int)selectedStation.SelectedValue))
+                {
+                    stationID = (int)selectedStation.SelectedValue;
+                    switchWindow();
+                }
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var stationID = (int)selectedStation.SelectedValue;
+            if (selectedStation.SelectedValue != null && isValidStation((int)selectedStation.SelectedValue))
+            {
+                stationID = (int)selectedStation.SelectedValue;
+                switchWindow();
+            }
+            else
+            {
+                error.Text = "Station niet gevonden";
+            }
+        }
+
+        private bool isValidStation(int id)
+        {
+            var query = "SELECT * FROM netherlands_train_stations WHERE id = @id";
+            var cmd = new MySqlCommand(query, con);
+            cmd.Parameters.AddWithValue("@id", id);
+            var reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Close();
+                return true;
+            }
+            reader.Close();
+            return false;
+        }
+
+        private void switchWindow()
+        {
             var mainwindow = new MainWindow(stationID);
             mainwindow.Show();
             con.Close();
