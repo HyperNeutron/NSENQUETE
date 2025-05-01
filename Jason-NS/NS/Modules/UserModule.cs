@@ -1,13 +1,15 @@
-﻿using NS.Helpers;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
+using NS.Helpers;
 
 namespace NS.Modules;
 
 public class UserModule
 {
     private Boolean HasConsent;
-    private string? UserName;
-    private string? SmallStory;
-    private string? FeedBack;
+    private string? name;
+    private string? smallStory;
+    private string? feedback;
     
     public void Main()
     {
@@ -31,13 +33,15 @@ public class UserModule
         AskForUsername();
         AskForSmallStory();
         AskForFeedback();
+
+        DataBaseHelper.SendUserFeedback(name, smallStory, feedback);
         
         Console.Clear();
         TextHelper.WriteStationLine();
-        Console.WriteLine("Bedankt voor uw input " + UserName + "!");
+        Console.WriteLine("Bedankt voor uw input " + name + "!");
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("Uw verhaal: " + SmallStory);
-        Console.WriteLine("Uw feedback: " + FeedBack);
+        Console.WriteLine("Uw verhaal: " + smallStory);
+        Console.WriteLine("Uw feedback: " + feedback);
         Console.ResetColor();
         await Task.Delay(3000); // 3 secondes
     }
@@ -56,21 +60,21 @@ public class UserModule
         Console.Clear();
         TextHelper.WriteStationLine();
         Console.WriteLine("Wat is uw naam?");
-        UserName = GetUserName(Console.ReadLine());
+        name = GetUserName(Console.ReadLine());
     }
-    
+
     private void AskForSmallStory()
     {
         while (true)
         {
             Console.Clear();
             TextHelper.WriteStationLine();
-            if (!string.IsNullOrEmpty(SmallStory))
+            if (!string.IsNullOrEmpty(smallStory))
             {
                 Console.WriteLine("Je verhaal is te lang!");
                 Console.WriteLine("Je huidige verhaal:");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(SmallStory);
+                Console.WriteLine(smallStory);
                 Console.ResetColor();
                 Console.WriteLine("Pas je verhaal aan (maximaal 100 tekens):");
             }
@@ -78,9 +82,9 @@ public class UserModule
             {
                 Console.WriteLine("Schrijf een kort verhaal over dit station (maximaal 100 tekens):");
             }
-            SmallStory = Console.ReadLine();
+            smallStory = Console.ReadLine();
 
-            if (!CheckLenght(SmallStory, 100))
+            if (!CheckLenght(smallStory, 100))
             {
                 break;
             }
@@ -94,12 +98,12 @@ public class UserModule
         {
             Console.Clear();
             TextHelper.WriteStationLine();
-            if (!string.IsNullOrEmpty(FeedBack))
+            if (!string.IsNullOrEmpty(feedback))
             {
                 Console.WriteLine("Je feedback is te lang!");
                 Console.WriteLine("Je huidige feedback:");
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine(FeedBack);
+                Console.WriteLine(feedback);
                 Console.ResetColor();
                 Console.WriteLine("Pas je feedback aan (maximaal 500 tekens):");
             }
@@ -107,9 +111,9 @@ public class UserModule
             {
                 Console.WriteLine("Heeft u feedback voor ons? (maximaal 500 tekens):");
             }
-            FeedBack = Console.ReadLine();
+            feedback = Console.ReadLine();
 
-            if (!CheckLenght(FeedBack, 100))
+            if (!CheckLenght(feedback, 100))
             {
                 break;
             }
