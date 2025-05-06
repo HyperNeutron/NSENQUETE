@@ -35,7 +35,7 @@ namespace NSdisplay
             if (reader.Read())
             {
                 stationName = reader.GetString(0);
-                station.Text = stationName;
+                stationLabel.Text = stationName;
                 var disabledColor = new Color();
                 disabledColor.R = 0;
                 disabledColor.G = 0;
@@ -44,19 +44,19 @@ namespace NSdisplay
                 var disabledBrush = new SolidColorBrush(disabledColor);
                 if (!reader.GetBoolean(1))
                 {
-                    elevator.Foreground = disabledBrush;
+                    elevatorIcon.Foreground = disabledBrush;
                 }
                 if (!reader.GetBoolean(2))
                 {
-                    wheelchair.Foreground = disabledBrush;
+                    wheelchairIcon.Foreground = disabledBrush;
                 }
                 if (!reader.GetBoolean(3))
                 {
-                    toilet.Foreground = disabledBrush;
+                    toiletIcon.Foreground = disabledBrush;
                 }
                 if (!reader.GetBoolean(4))
                 {
-                    kiosk.Foreground = disabledBrush;
+                    kioskIcon.Foreground = disabledBrush;
                 }
             }
             reader.Close();

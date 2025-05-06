@@ -29,13 +29,13 @@
         <StackPanel Grid.Row="4" Grid.ColumnSpan="5" Background="#000066">
             <Viewbox Stretch="Fill" StretchDirection="DownOnly">
                 <StackPanel Margin="40,30,30,0" Orientation="Horizontal" Width="1850">
-                    <TextBlock x:Name="station" Margin="0,10,0,0" Foreground="White" FontWeight="DemiBold" FontSize="90"  Width="1230"></TextBlock>
+                    <TextBlock x:Name="stationLabel" Margin="0,10,0,0" Foreground="White" FontWeight="DemiBold" FontSize="90"  Width="1230"></TextBlock>
                     <StackPanel Width="640" HorizontalAlignment="Right">
                         <TextBlock Margin="0,10,0,0" TextAlignment="Right" Foreground="White" FontSize="90">
-                            <Span x:Name="elevator">🛗</Span>
-                            <Span x:Name="wheelchair">♿</Span>
-                            <Span x:Name="toilet">🚽</Span>
-                            <Span x:Name="kiosk">🏪</Span>
+                            <Span x:Name="elevatorIcon">🛗</Span>
+                            <Span x:Name="wheelchairIcon">♿</Span>
+                            <Span x:Name="toiletIcon">🚽</Span>
+                            <Span x:Name="kioskIcon">🏪</Span>
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
