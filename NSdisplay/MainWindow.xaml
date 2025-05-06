@@ -23,6 +23,9 @@
             <RowDefinition Height="20*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
+        <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
+            <TextBlock x:Name="clock" Margin="1,0,0,0" Foreground="#000066">16:00</TextBlock>
+        </Viewbox>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="5" Background="#000066">
             <Viewbox Stretch="Fill" StretchDirection="DownOnly">
                 <StackPanel Margin="40,30,30,0" Orientation="Horizontal" Width="1850">

@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using System.Configuration;
 using MySql.Data.MySqlClient;
 using NSdisplay.Services.Database;
+using System.ComponentModel;
 
 namespace NSdisplay
 {
@@ -59,9 +60,17 @@ namespace NSdisplay
                 }
             }
             reader.Close();
-
+            updateClock();
         }
 
-        
+        async void updateClock()
+        {
+            while (true)
+            {
+                clock.Text = DateTime.Now.ToString("HH:mm");
+                await Task.Delay(TimeSpan.FromMilliseconds(250));
+            }
+
+        }
     }
 }
