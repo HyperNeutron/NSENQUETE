@@ -4,27 +4,29 @@ using System.Linq;
 using System.Runtime.InteropServices.JavaScript;
 using System.Text;
 using System.Threading.Tasks;
+using Administration.Helpers;
 using NS.Helpers;
 
 namespace NS.Modules
 {
     internal class AdministrationModule
     {
-        public static void Launch() 
+        public static void Launch()
         {
             (int id, string? name, string? smallStory, string? feedback) review = (0, null, null, null);
 
             while (true)
             {
-                review = DataBaseHelper.GetReviewRow();
+                review = FeedbackDatabase.GetReviewRow();
                 break;
             }
 
             if (string.IsNullOrEmpty(review.name))
             {
                 Console.Clear();
+                TextHelper.WriteStationLine();
                 Console.WriteLine("Er zijn geen berichten om te beoordelen");
-                Thread.Sleep(10000);
+                Thread.Sleep(10000); // Elke 10 seconde wordt er gekeken of er nieuwe feedback binnen is gekomen
             }
 
             Console.Clear();
@@ -40,10 +42,10 @@ namespace NS.Modules
             {
                 Console.WriteLine("\nGoedkeuren? ja/nee");
                 string? choice = Console.ReadLine();
-                
+
                 if (choice == "ja")
                 {
-                    DataBaseHelper.SendProcessedFeedback(review.id, review.name, review.smallStory, review.feedback, true);
+                    FeedbackDatabase.SendProcessedFeedback(review.id, review.name, review.smallStory, review.feedback, true);
                     Console.WriteLine("\nFeedback beoordeeld!");
                     Console.WriteLine("Nieuwe feedback laden ...");
                     Thread.Sleep(2000);
@@ -51,7 +53,7 @@ namespace NS.Modules
                 }
                 if (choice == "nee")
                 {
-                    DataBaseHelper.SendProcessedFeedback(review.id, review.name, review.smallStory, review.feedback, false);
+                    FeedbackDatabase.SendProcessedFeedback(review.id, review.name, review.smallStory, review.feedback, false);
                     Console.WriteLine("\nFeedback beoordeeld!");
                     Console.WriteLine("Nieuwe feedback laden ...");
                     Thread.Sleep(2000);
@@ -60,7 +62,7 @@ namespace NS.Modules
 
                 Console.WriteLine("\nVoer ja of nee in!");
             }
-                
+
         }
     }
 }

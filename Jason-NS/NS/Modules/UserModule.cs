@@ -43,6 +43,7 @@ public class UserModule
         Console.WriteLine("Uw verhaal: " + smallStory);
         Console.WriteLine("Uw feedback: " + feedback);
         Console.ResetColor();
+        Console.WriteLine("\nUw antwoord wordt verstuurd...");
         await Task.Delay(3000); // 3 secondes
     }
 
@@ -50,7 +51,7 @@ public class UserModule
     {
         Console.Clear();
         TextHelper.WriteStationLine();
-        Console.WriteLine("Welkom bij het NS programma!\n" +
+        Console.WriteLine("Welkom bij het NS feedback programma!\n" +
                           "Hebben wij uw toestemming om deze gegevens te gebruiken? (ja/nee)");
         HasConsent = GetIfHasConsent(Console.ReadLine());
     }
@@ -84,7 +85,7 @@ public class UserModule
             }
             smallStory = Console.ReadLine();
 
-            if (!CheckLenght(smallStory, 100))
+            if (!CheckLength(smallStory, 100))
             {
                 break;
             }
@@ -113,7 +114,7 @@ public class UserModule
             }
             feedback = Console.ReadLine();
 
-            if (!CheckLenght(feedback, 100))
+            if (!CheckLength(feedback, 100))
             {
                 break;
             }
@@ -147,7 +148,7 @@ public class UserModule
     /// <param name="input">The input of the user</param>
     ///<param name="characters">The maximum amount of characters</param>
     /// <returns>true if the input lenght is over the character limit</returns>
-    private bool CheckLenght(string? input, int characters)
+    private bool CheckLength(string? input, int characters)
     {
         return string.IsNullOrEmpty(input) ? true : input.Length > characters;
     }
