@@ -26,8 +26,28 @@
         <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
             <TextBlock x:Name="clock" Margin="1,0,0,0" Foreground="#000066">16:00</TextBlock>
         </Viewbox>
+        <StackPanel x:Name="reviewContainer" Margin="0,0,0,20" Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="5">
+            <Viewbox Width="1000" Margin="500,0,0,0">
+                <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
+                    <StackPanel>
+                        <TextBlock x:Name="reviewContent1" FontSize="55" Height="360" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock x:Name="reviewer1" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
+                        <TextBlock x:Name="date1" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
+                    </StackPanel>
+                </Border>
+            </Viewbox>
+            <Viewbox Width="1000" Margin="500,0,0,0">
+                <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
+                    <StackPanel>
+                        <TextBlock x:Name="reviewContent2" FontSize="55" Height="360" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock x:Name="reviewer2" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
+                        <TextBlock x:Name="date2" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
+                    </StackPanel>
+                </Border>
+            </Viewbox>
+        </StackPanel>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="5" Background="#000066">
-            <Viewbox Stretch="Fill" StretchDirection="DownOnly">
+            <Viewbox Stretch="Fill">
                 <StackPanel Margin="40,30,30,0" Orientation="Horizontal" Width="1850">
                     <TextBlock x:Name="stationLabel" Margin="0,10,0,0" Foreground="White" FontWeight="DemiBold" FontSize="90"  Width="1230"></TextBlock>
                     <StackPanel Width="640" HorizontalAlignment="Right">
