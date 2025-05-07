@@ -12,6 +12,7 @@ using System.Configuration;
 using MySql.Data.MySqlClient;
 using NSdisplay.Services.Database;
 using System.ComponentModel;
+using System.Windows.Media.Animation;
 
 namespace NSdisplay
 {
@@ -61,6 +62,7 @@ namespace NSdisplay
             }
             reader.Close();
             updateClock();
+            nextReview();
         }
 
         async void updateClock()
@@ -70,6 +72,20 @@ namespace NSdisplay
                 clock.Text = DateTime.Now.ToString("HH:mm");
                 await Task.Delay(TimeSpan.FromMilliseconds(250));
             }
+        }
+
+        async void nextReview()
+        {
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            double width = reviewContainer.ActualWidth;
+            ThicknessAnimation reviewAnimation = new ThicknessAnimation(new Thickness(0, 0, 0, 20), new Thickness(-width/2,0,0,20), TimeSpan.FromSeconds(1));
+            while (true)
+            {
+                reviewContainer.BeginAnimation(MarginProperty, reviewAnimation);
+                await Task.Delay(TimeSpan.FromSeconds(5));
+            }
+        }
+    }
 
         }
     }

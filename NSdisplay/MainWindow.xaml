@@ -1,4 +1,5 @@
 ﻿<Window x:Class="NSdisplay.MainWindow"
+        x:Name="window"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,8 +7,12 @@
         xmlns:local="clr-namespace:NSdisplay"
         mc:Ignorable="d"
         FontFamily="Bahnschrift"
-        Title="MainWindow" Height="1080" Width="1920"
+        Title="MainWindow" 
+        Height="1080" Width="1920"
         WindowState="Maximized" WindowStyle="None">
+    <Window.Resources>
+        <local:DoubleWidth x:Key="DoubleWidth"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20*"/>
@@ -26,26 +31,30 @@
         <Viewbox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left">
             <TextBlock x:Name="clock" Margin="1,0,0,0" Foreground="#000066">16:00</TextBlock>
         </Viewbox>
-        <StackPanel x:Name="reviewContainer" Margin="0,0,0,20" Orientation="Horizontal" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="5">
-            <Viewbox Width="1000" Margin="500,0,0,0">
+        <Grid x:Name="reviewContainer" Width="{Binding Path= Width, ElementName= window, Converter={StaticResource DoubleWidth}}" Margin="0,0,0,20" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Viewbox Grid.Column="0">
                 <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
                     <StackPanel>
-                        <TextBlock x:Name="reviewContent1" FontSize="55" Height="360" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock x:Name="reviewContent1" FontSize="55" Height="360" TextWrapping="Wrap">1</TextBlock>
                         <TextBlock x:Name="reviewer1" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
                         <TextBlock x:Name="date1" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
                     </StackPanel>
                 </Border>
             </Viewbox>
-            <Viewbox Width="1000" Margin="500,0,0,0">
+            <Viewbox Grid.Column="1">
                 <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
                     <StackPanel>
-                        <TextBlock x:Name="reviewContent2" FontSize="55" Height="360" TextWrapping="Wrap"></TextBlock>
+                        <TextBlock x:Name="reviewContent2" FontSize="55" Height="360" TextWrapping="Wrap">2</TextBlock>
                         <TextBlock x:Name="reviewer2" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
                         <TextBlock x:Name="date2" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
                     </StackPanel>
                 </Border>
             </Viewbox>
-        </StackPanel>
+        </Grid>
         <StackPanel Grid.Row="4" Grid.ColumnSpan="5" Background="#000066">
             <Viewbox Stretch="Fill">
                 <StackPanel Margin="40,30,30,0" Orientation="Horizontal" Width="1850">
