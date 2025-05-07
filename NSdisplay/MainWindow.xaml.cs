@@ -25,14 +25,18 @@ namespace NSdisplay
         public static MySqlConnection con = DbConnection.GetConnection();
         public MainWindow(int id)
         {
+            InitializeComponent();
+
             con.Open();
+
             int stationID = id;
             string stationName;
-            InitializeComponent();
+
             string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, haskiosk FROM netherlands_train_stations WHERE id = @stationID";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
             var reader = cmd.ExecuteReader();
+
             if (reader.Read())
             {
                 stationName = reader.GetString(0);
