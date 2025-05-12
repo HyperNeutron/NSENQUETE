@@ -83,6 +83,7 @@ namespace NSdisplay
             await Task.Delay(TimeSpan.FromSeconds(1));
             double width = reviewContainer.ActualWidth;
             ThicknessAnimation reviewAnimation = new ThicknessAnimation(new Thickness(0, 0, 0, 20), new Thickness(-width/2,0,0,20), TimeSpan.FromSeconds(1));
+            reviewAnimation.EasingFunction = new SineEase();
             while (true)
             {
                 reviewContainer.BeginAnimation(MarginProperty, reviewAnimation);
