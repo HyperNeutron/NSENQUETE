@@ -15,7 +15,16 @@ namespace NSdisplay
         int stationID;
         public stationPicker()
         {
-            con.Open();
+            try
+            {
+                con.Open();
+            }
+            catch (MySqlException exception)
+            {
+                MessageBox.Show("Database niet verbonden" , "Error");
+                App.Current.Shutdown();
+                return;
+            }
             InitializeComponent();
             var stations = new List<Station>();
             var query = "SELECT id, name FROM netherlands_train_stations";
