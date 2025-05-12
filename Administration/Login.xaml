@@ -1,0 +1,73 @@
+﻿<Window x:Class="Administration.Login"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Administration"
+      mc:Ignorable="d"
+      Title="login" Height="450" Width="800">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Background="#000066" Grid.Row="0">
+            <TextBlock x:Name="headerText" 
+                       Foreground="White" 
+                       HorizontalAlignment="Center" 
+                       VerticalAlignment="Center" 
+                       FontSize="40" 
+                       FontWeight="DemiBold"
+                       Text="Inloggen"/>
+        </Grid>
+
+        <StackPanel x:Name="loginPanel" Grid.Row="1" Margin="40,20" VerticalAlignment="Center">
+            <TextBlock Text="Email" FontSize="16" Width="300" Margin="0,10,0,5"/>
+            <TextBox x:Name="loginEmail" Height="30" VerticalContentAlignment="Center" FontSize="14" Width="300"/>
+
+            <TextBlock Text="Wachtwoord" FontSize="16" Width="300" Margin="0,20,0,5"/>
+            <PasswordBox x:Name="loginPassword" Height="30" VerticalContentAlignment="Center" FontSize="14" Width="300"/>
+
+            <Button Content="Aanmelden" 
+                    Background="#000066"
+                    Foreground="White" 
+                    Height="40" 
+                    Margin="0,30,0,10" 
+                    FontSize="16"
+                    Width="300"
+                    Click="Login_Click"/>
+
+            <TextBlock HorizontalAlignment="Center" FontSize="16" Margin="0,20,0,0">
+                <Hyperlink Click="SwitchToSignup_Click">Heb je nog geen account? Registreer</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
+
+        <StackPanel x:Name="signupPanel" Grid.Row="1" Margin="40,20" VerticalAlignment="Center" Visibility="Collapsed">
+
+            <TextBlock Text="Gebruikersnaam" FontSize="16" Width="300" Margin="0,10,0,5"/>
+            <TextBox x:Name="signupUsername" Height="30" VerticalContentAlignment="Center" FontSize="14" Width="300"/>
+
+            <TextBlock Text="Email" FontSize="16" Margin="0,10,0,5" Width="300"/>
+            <TextBox x:Name="signupEmail" Height="30" VerticalContentAlignment="Center" FontSize="14" Width="300"/>
+
+            <TextBlock Text="Wachtwoord" FontSize="16" Width="300" Margin="0,10,0,5"/>
+            <PasswordBox x:Name="signupPassword" Height="30" VerticalContentAlignment="Center" FontSize="14" Width="300"/>
+
+            <Button Content="Registreer" 
+                    Background="#000066"
+                    Foreground="White" 
+                    Height="40" 
+                    Margin="0,20,0,10" 
+                    FontSize="16"
+                    Width="300"
+                    Click="Signup_Click"/>
+
+            <TextBlock HorizontalAlignment="Center" FontSize="16" Margin="0,0,0,0">
+                <Hyperlink Click="SwitchToLogin_Click">Heb je al een account? Log in</Hyperlink>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</Window>
