@@ -96,12 +96,13 @@ namespace NSdisplay
             latestFeedback[0] = new approvedFeedback("", "Geen feedback gevonden", new DateTime(0));
 
             double width = reviewContainer.ActualWidth;
-            ThicknessAnimation reviewAnimation = new(new Thickness(0, 0, 0, 20), new Thickness(-width / 2, 0, 0, 20), TimeSpan.FromSeconds(1))
+            ThicknessAnimation reviewAnimation = new(new Thickness(0, 0, 0, 20), new Thickness(-width / 2, 0, 0, 20), TimeSpan.FromSeconds(2))
             {
                 EasingFunction = new SineEase()
             };
 
-            while (true) {
+            while (true)
+            {
                 string query = "SELECT sender, shortMessage, date_posted from messages WHERE is_approved AND station_id = @station_id ORDER BY date_posted DESC LIMIT @feedbackAmount";
                 var cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@feedbackAmount", feedbackAmount);
@@ -133,11 +134,16 @@ namespace NSdisplay
 
                 currentFeedback = nextFeedback;
 
-                nextFeedback += nextFeedback >= count - 1 ? -(count - 1) : 1;
+                if (nextFeedback >= count - 1) nextFeedback = 0;
+                else nextFeedback++;
 
                 reviewContent2.Text = latestFeedback[nextFeedback].small_story;
                 reviewer2.Text = latestFeedback[nextFeedback].name;
                 date2.Text = latestFeedback[nextFeedback].date_posted.ToString("dd/MM");
+
+                reviewContent1.Text = latestFeedback[currentFeedback].small_story;
+                reviewer1.Text = latestFeedback[currentFeedback].name;
+                date1.Text = latestFeedback[currentFeedback].date_posted.ToString("dd/MM");
 
                 await Task.Delay(TimeSpan.FromSeconds(3));
             }
