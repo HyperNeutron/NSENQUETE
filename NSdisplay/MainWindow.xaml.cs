@@ -13,6 +13,8 @@ using MySql.Data.MySqlClient;
 using NSdisplay.Services.Database;
 using System.ComponentModel;
 using System.Windows.Media.Animation;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace NSdisplay
 {
@@ -23,7 +25,26 @@ namespace NSdisplay
     public partial class MainWindow : Window
     {
         public static MySqlConnection con = DbConnection.GetConnection();
+        static HttpClient client = new HttpClient();
         int stationID;
+        Dictionary<int, string> weatherIcons = new Dictionary<int, string>()
+            {
+                { 0, "☀️" },
+                { 1, "🌤️" },
+                { 2, "⛅" },
+                { 3, "☁️" },
+                { 4, "🌫️" },
+                { 5, "🌁" },
+                { 6, "🌧️" },
+                { 7, "🌨️" },
+                { 8, "🌩️" },
+                { 9, "🌦️" },
+                { 10, "🌧️" },
+                { 11, "🌧️" },
+                { 12, "🌨️" },
+                { 13, "🌨️" },
+                { 14, "🌩️" }
+            };
 
         public MainWindow(int id)
         {
@@ -34,7 +55,11 @@ namespace NSdisplay
             stationID = id;
             string stationName;
 
-            string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, haskiosk FROM netherlands_train_stations WHERE id = @stationID";
+            client.BaseAddress = new Uri("https://api.open-meteo.com/v1/");
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, hasKiosk FROM netherlands_train_stations WHERE id = @stationID";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
             var reader = cmd.ExecuteReader();
@@ -70,6 +95,7 @@ namespace NSdisplay
 
             updateClock();
             nextReview();
+            updateWeather();
         }
 
         async void updateClock()
@@ -78,6 +104,21 @@ namespace NSdisplay
             {
                 clock.Text = DateTime.Now.ToString("HH:mm");
                 await Task.Delay(TimeSpan.FromMilliseconds(250));
+            }
+        }
+
+        async void updateWeather()
+        {
+            while (true)
+            {
+                weatherReport currentWeather = new();
+                HttpResponseMessage response = await client.GetAsync("forecast?latitude=52.374&longitude=4.8897&current=temperature_2m,weather_code&timezone=Europe%2FBerlin");
+                if (response.IsSuccessStatusCode)
+                {
+                    currentWeather = await response.Content.ReadAsAsync<weatherReport>();
+                }
+                weather.Text = $"{currentWeather.current.temperature_2m} °c {weatherIcons[currentWeather.current.weather_code]}";
+                await Task.Delay(TimeSpan.FromMinutes(1));
             }
         }
 
@@ -174,5 +215,20 @@ namespace NSdisplay
             this.small_story = small_story;
             this.date_posted = approved_on;
         }
+    }
+
+    public class weatherReport
+    {
+        public result current;
+
+        public weatherReport()
+        {
+            current = new result();
+        }
+    }
+    public class result
+    {
+        public int weather_code;
+        public string temperature_2m;
     }
 }
