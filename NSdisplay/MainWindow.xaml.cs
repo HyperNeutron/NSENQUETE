@@ -62,36 +62,37 @@ namespace NSdisplay
             string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, hasKiosk FROM stations WHERE id = @stationID";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
-            var reader = cmd.ExecuteReader();
 
-            if (reader.Read())
+            using (var reader = cmd.ExecuteReader())
             {
-                stationName = reader.GetString(0);
-                stationLabel.Text = stationName;
-                var disabledColor = new Color();
-                disabledColor.R = 0;
-                disabledColor.G = 0;
-                disabledColor.B = 77;
-                disabledColor.A = 255;
-                var disabledBrush = new SolidColorBrush(disabledColor);
-                if (!reader.GetBoolean(1))
+                if (reader.Read())
                 {
-                    elevatorIcon.Foreground = disabledBrush;
-                }
-                if (!reader.GetBoolean(2))
-                {
-                    wheelchairIcon.Foreground = disabledBrush;
-                }
-                if (!reader.GetBoolean(3))
-                {
-                    toiletIcon.Foreground = disabledBrush;
-                }
-                if (!reader.GetBoolean(4))
-                {
-                    kioskIcon.Foreground = disabledBrush;
+                    stationName = reader.GetString(0);
+                    stationLabel.Text = stationName;
+                    var disabledColor = new Color();
+                    disabledColor.R = 0;
+                    disabledColor.G = 0;
+                    disabledColor.B = 77;
+                    disabledColor.A = 255;
+                    var disabledBrush = new SolidColorBrush(disabledColor);
+                    if (!reader.GetBoolean(1))
+                    {
+                        elevatorIcon.Foreground = disabledBrush;
+                    }
+                    if (!reader.GetBoolean(2))
+                    {
+                        wheelchairIcon.Foreground = disabledBrush;
+                    }
+                    if (!reader.GetBoolean(3))
+                    {
+                        toiletIcon.Foreground = disabledBrush;
+                    }
+                    if (!reader.GetBoolean(4))
+                    {
+                        kioskIcon.Foreground = disabledBrush;
+                    }
                 }
             }
-            reader.Close();
 
             updateClock();
             nextReview();
@@ -148,16 +149,16 @@ namespace NSdisplay
                 var cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@feedbackAmount", feedbackAmount);
                 cmd.Parameters.AddWithValue("@station_id", stationID);
-                var reader = cmd.ExecuteReader();
 
                 int count = 0;
-                while (reader.Read())
+                using (var reader = cmd.ExecuteReader())
                 {
-                    latestFeedback[count] = new approvedFeedback(reader.GetString(0), reader.GetString(1), reader.GetDateTime(2));
-                    count++;
+                    while (reader.Read())
+                    {
+                        latestFeedback[count] = new approvedFeedback(reader.GetString(0), reader.GetString(1), reader.GetDateTime(2));
+                        count++;
+                    }
                 }
-
-                reader.Close();
 
                 reviewContent1.Text = latestFeedback[currentFeedback].small_story;
                 reviewer1.Text = latestFeedback[currentFeedback].name;
