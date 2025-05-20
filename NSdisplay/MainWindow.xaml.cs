@@ -134,9 +134,6 @@ namespace NSdisplay
             approvedFeedback[] latestFeedback = new approvedFeedback[feedbackAmount];
             List<approvedFeedback> queue = new();
 
-            //placeholder feedback
-            latestFeedback[0] = new approvedFeedback("", "Geen feedback gevonden", new DateTime(0));
-
             double width = reviewContainer.ActualWidth;
             ThicknessAnimation reviewAnimation = new(new Thickness(0, 0, 0, 20), new Thickness(-width / 2, 0, 0, 20), TimeSpan.FromSeconds(2))
             {
@@ -160,8 +157,17 @@ namespace NSdisplay
                             latestFeedback[count] = new approvedFeedback(reader.GetString(0), reader.GetString(1), reader.GetDateTime(2));
                             count++;
                         }
-                        queue.AddRange(latestFeedback);
+                        if(count > queue.Count)
+                        {
+                            queue.AddRange(latestFeedback.Take(count));
+                        }
                     }
+                }
+
+                if (count <= 0)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                    continue;
                 }
 
                 reviewContent1.Text = queue.First().small_story;
@@ -174,7 +180,7 @@ namespace NSdisplay
                     continue;
                 }
 
-                await Task.Delay(TimeSpan.FromSeconds(3));
+                await Task.Delay(TimeSpan.FromSeconds(10));
 
                 reviewContainer.BeginAnimation(MarginProperty, reviewAnimation);
 
