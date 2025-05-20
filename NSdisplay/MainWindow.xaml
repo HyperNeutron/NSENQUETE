@@ -42,7 +42,7 @@
             <Viewbox Grid.Column="0">
                 <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
                     <StackPanel>
-                        <TextBlock x:Name="reviewContent1" FontSize="55" Height="360" TextWrapping="Wrap">1</TextBlock>
+                        <TextBlock x:Name="reviewContent1" FontSize="55" Height="360" TextWrapping="Wrap">Geen feedback gevonden</TextBlock>
                         <TextBlock x:Name="reviewer1" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
                         <TextBlock x:Name="date1" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
                     </StackPanel>
@@ -51,7 +51,7 @@
             <Viewbox Grid.Column="1">
                 <Border Padding="20,10,20,10" Width="960" BorderBrush="#000066" BorderThickness="2">
                     <StackPanel>
-                        <TextBlock x:Name="reviewContent2" FontSize="55" Height="360" TextWrapping="Wrap">2</TextBlock>
+                        <TextBlock x:Name="reviewContent2" FontSize="55" Height="360" TextWrapping="Wrap"></TextBlock>
                         <TextBlock x:Name="reviewer2" Foreground="#000066" FontWeight="Bold" TextWrapping="Wrap" FontSize="50"></TextBlock>
                         <TextBlock x:Name="date2" Margin="0,20,0,0" Foreground="Gray" FontSize="40" Height="50"></TextBlock>
                     </StackPanel>
