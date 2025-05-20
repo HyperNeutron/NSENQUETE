@@ -70,14 +70,14 @@ namespace NSdisplay
             var query = "SELECT * FROM stations WHERE id = @id";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@id", id);
-            var reader = cmd.ExecuteReader();
-            if (reader.Read())
+            using (var reader = cmd.ExecuteReader())
             {
-                reader.Close();
-                return true;
+                if (reader.Read())
+                {
+                    return true;
+                }
+                return false;
             }
-            reader.Close();
-            return false;
         }
 
         private void switchWindow()
