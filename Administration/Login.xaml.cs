@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Administration.Models;
 using Administration.Services.Database;
 using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 
 namespace Administration
 {
@@ -15,6 +16,7 @@ namespace Administration
     /// </summary>
     public partial class Login : Window
     {
+        private int userID;
         public Login()
         {
             InitializeComponent();
@@ -60,7 +62,8 @@ namespace Administration
                 User currentUser = new User
                 {
                     Username = username,
-                    Email = email
+                    Email = email,
+                    id = userID,
                 };
 
                 var stationPicker = new StationPicker(currentUser);
@@ -90,7 +93,8 @@ namespace Administration
                 User currentUser = new User
                 {
                     Username = username,
-                    Email = email
+                    Email = email,
+                    id = userID
                 };
 
                 MessageBox.Show("Account aangemaakt!", "Registration Complete", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -116,19 +120,21 @@ namespace Administration
                 {
                     connection.Open();
 
-                    string query = "SELECT username FROM users WHERE email = @Email AND password = @Password";
+                    string query = "SELECT username,id FROM users WHERE email = @Email AND password = @Password";
 
                     using (var command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Email", email);
                         command.Parameters.AddWithValue("@Password", hashedPassword);
 
-                        var result = command.ExecuteScalar();
-
-                        if (result != null)
+                        using(var reader = command.ExecuteReader())
                         {
-                            username = result.ToString();
-                            return true;
+                            if (reader.Read()) {
+                                username = reader.GetString(0);
+                                userID = reader.GetInt32(1);
+                                return true;
+                            }
+                            return false;
                         }
                     }
                 }
@@ -165,6 +171,7 @@ namespace Administration
                         command.Parameters.AddWithValue("@Password", hashedPassword);
 
                         int rowsAffected = command.ExecuteNonQuery();
+                        userID = unchecked((int)command.LastInsertedId);
                         return rowsAffected > 0;
                     }
                 }

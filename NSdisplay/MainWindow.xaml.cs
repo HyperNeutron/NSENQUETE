@@ -59,7 +59,7 @@ namespace NSdisplay
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, hasKiosk FROM netherlands_train_stations WHERE id = @stationID";
+            string query = "SELECT name, hasLift, wheelChairAccessible, hasToilet, hasKiosk FROM stations WHERE id = @stationID";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@stationID", stationID);
             var reader = cmd.ExecuteReader();
@@ -111,11 +111,11 @@ namespace NSdisplay
         {
             while (true)
             {
-                weatherReport currentWeather = new();
+                WeatherReport currentWeather = new();
                 HttpResponseMessage response = await client.GetAsync("forecast?latitude=52.374&longitude=4.8897&current=temperature_2m,weather_code&timezone=Europe%2FBerlin");
                 if (response.IsSuccessStatusCode)
                 {
-                    currentWeather = await response.Content.ReadAsAsync<weatherReport>();
+                    currentWeather = await response.Content.ReadAsAsync<WeatherReport>();
                 }
                 weather.Text = $"{currentWeather.current.temperature_2m} °c {weatherIcons[currentWeather.current.weather_code]}";
                 await Task.Delay(TimeSpan.FromMinutes(1));
@@ -144,7 +144,7 @@ namespace NSdisplay
 
             while (true)
             {
-                string query = "SELECT sender, shortMessage, date_posted from messages WHERE is_approved AND station_id = @station_id ORDER BY date_posted DESC LIMIT @feedbackAmount";
+                string query = "SELECT sender, shortMessage, date_posted from user_feedback WHERE is_approved AND station_id = @station_id ORDER BY date_posted DESC LIMIT @feedbackAmount";
                 var cmd = new MySqlCommand(query, con);
                 cmd.Parameters.AddWithValue("@feedbackAmount", feedbackAmount);
                 cmd.Parameters.AddWithValue("@station_id", stationID);
@@ -209,24 +209,24 @@ namespace NSdisplay
         public string small_story;
         public DateTime date_posted;
 
-        public approvedFeedback(string name, string small_story, DateTime approved_on)
+        public approvedFeedback(string name, string small_story, DateTime date_posted)
         {
             this.name = name;
             this.small_story = small_story;
-            this.date_posted = approved_on;
+            this.date_posted = date_posted;
         }
     }
 
-    public class weatherReport
+    public class WeatherReport
     {
-        public result current;
+        public Result current;
 
-        public weatherReport()
+        public WeatherReport()
         {
-            current = new result();
+            current = new Result();
         }
     }
-    public class result
+    public class Result
     {
         public int weather_code;
         public string temperature_2m;

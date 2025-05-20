@@ -10,7 +10,7 @@ namespace Administration.Services.Database
     {
         public static string Host { get; set; } = "localhost";
 
-        public static string Name { get; set; } = "nsenquete";
+        public static string Name { get; set; } = "ns";
 
         public static string User { get; set; } = "root";
 

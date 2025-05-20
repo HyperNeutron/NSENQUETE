@@ -13,15 +13,16 @@ namespace Administration
     {
         private int StationID { get; set; }
         public string StationName { get; set; }
-        public string UserName { get; set; }
+        public User CurrentUser { get; set; }
         private int currentReviewId { get; set; }
         public MainWindow(int stationID, string stationName, User user)
         {
 
             InitializeComponent();
             this.DataContext = this;
+            this.StationID = stationID;
             this.StationName = stationName;
-            this.UserName = user.Username;
+            this.CurrentUser = user;
 
             Loaded += async (s, e) =>
             {
@@ -92,19 +93,19 @@ namespace Administration
                         {
                             connection.Open();
 
-                            string query = "SELECT * FROM user_feedback WHERE station = @station LIMIT 1";
+                            string query = "SELECT * FROM user_feedback WHERE station_id = @station_id AND is_reviewed = 0 LIMIT 1";
                             using (MySqlCommand command = new MySqlCommand(query, connection))
                             {
-                                command.Parameters.AddWithValue("@station", StationName);
+                                command.Parameters.AddWithValue("@station_id", StationID);
                                 using (MySqlDataReader reader = command.ExecuteReader())
                                 {
                                     if (reader.Read())
                                     {
                                         response = (
                                             reader.GetInt32(reader.GetOrdinal("id")),
-                                            reader.GetString(reader.GetOrdinal("name")),
-                                            reader.GetString(reader.GetOrdinal("small_story")),
-                                            reader.GetString(reader.GetOrdinal("feedback"))
+                                            reader.GetString(reader.GetOrdinal("sender")),
+                                            reader.GetString(reader.GetOrdinal("shortMessage")),
+                                            reader.GetString(reader.GetOrdinal("longMessage"))
                                         );
                                     }
                                 }
@@ -158,29 +159,13 @@ namespace Administration
                     {
                         connection.Open();
 
-                        string query = "INSERT INTO processed_feedback (name, small_story, feedback, station, is_approved, approved_by, approved_on) VALUES (@name, @small_story, @feedback, @station, @is_approved, @approved_by, @approved_on)";
+                        string query = "UPDATE user_feedback SET is_approved = @is_approved, is_reviewed = 1, reviewer_id = @reviewer_id WHERE id = @id";
                         using (MySqlCommand command = new MySqlCommand(query, connection))
                         {
-                            command.Parameters.AddWithValue("@name", nameValue);
-                            command.Parameters.AddWithValue("@small_story", shortStoryValue);
-                            command.Parameters.AddWithValue("@feedback", feedbackValue);
-                            command.Parameters.AddWithValue("@station", StationID);
-                            command.Parameters.AddWithValue("@approved_by", UserName);
                             command.Parameters.AddWithValue("@is_approved", isApproved);
-                            command.Parameters.AddWithValue("@approved_on", DateTime.Now);
-
-                            command.ExecuteNonQuery();
-                        }
-                    }
-
-                    using (MySqlConnection connection = DbConnection.GetConnection())
-                    {
-                        connection.Open();
-
-                        string query = "DELETE FROM user_feedback WHERE id = @id";
-                        using (MySqlCommand command = new MySqlCommand(query, connection))
-                        {
                             command.Parameters.AddWithValue("@id", currentReviewId);
+                            command.Parameters.AddWithValue("@reviewer_id", CurrentUser.id);
+
                             command.ExecuteNonQuery();
                         }
                     }
@@ -195,7 +180,7 @@ namespace Administration
                                  MessageBoxImage.Error);
             }
 
-            var newWindow = new MainWindow(this.StationID, this.StationName, new User { Username = this.UserName });
+            var newWindow = new MainWindow(this.StationID, this.StationName, CurrentUser);
             newWindow.Show();
             this.Close();
         }

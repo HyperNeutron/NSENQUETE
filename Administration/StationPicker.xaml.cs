@@ -25,7 +25,7 @@ namespace Administration
             con.Open();
             InitializeComponent();
             var stations = new List<Station>();
-            var query = "SELECT id, name FROM netherlands_train_stations";
+            var query = "SELECT id, name FROM stations";
             var cmd = new MySqlCommand(query, con);
             var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -69,7 +69,7 @@ namespace Administration
 
         private bool isValidStation(int id)
         {
-            var query = "SELECT * FROM netherlands_train_stations WHERE id = @id";
+            var query = "SELECT * FROM stations WHERE id = @id";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@id", id);
             var reader = cmd.ExecuteReader();

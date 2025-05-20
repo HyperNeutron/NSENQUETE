@@ -31,7 +31,7 @@ public partial class feedback : Window
     }
     private void SaveFeedback()
     {
-        const string query = "INSERT INTO feedback (name, message, feedback, station_id) VALUES (@name, @message, @feedback, @station_id)";
+        const string query = "INSERT INTO user_feedback (sender, shortMessage, longMessage, station_id) VALUES (@name, @message, @feedback, @station_id)";
 
         using var cmd = new MySqlCommand(query, conn);
         cmd.Parameters.AddWithValue("@name", feedbackModel.Name ?? "Anonymous");
@@ -52,7 +52,7 @@ public partial class feedback : Window
 
     private void ChangeStationName()
     {
-        const string query = "SELECT id, name FROM netherlands_train_stations WHERE id = @stationID";
+        const string query = "SELECT id, name FROM stations WHERE id = @stationID";
 
         using var cmd = new MySqlCommand(query, conn);
         cmd.Parameters.AddWithValue("@stationID", stationId);
