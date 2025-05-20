@@ -95,7 +95,7 @@ namespace NSdisplay
             }
 
             updateClock();
-            nextReview();
+            ReviewController();
             updateWeather();
         }
 
@@ -123,16 +123,16 @@ namespace NSdisplay
             }
         }
 
-        async void nextReview()
+        async void ReviewController()
         {
-            int currentFeedback = 0;
-            int nextFeedback = 0;
             int feedbackAmount = 5;
+            int count = 0;
 
             //Without this the animation wont work 
             await Task.Delay(TimeSpan.FromMilliseconds(1));
 
             approvedFeedback[] latestFeedback = new approvedFeedback[feedbackAmount];
+            List<approvedFeedback> queue = new();
 
             //placeholder feedback
             latestFeedback[0] = new approvedFeedback("", "Geen feedback gevonden", new DateTime(0));
@@ -150,19 +150,23 @@ namespace NSdisplay
                 cmd.Parameters.AddWithValue("@feedbackAmount", feedbackAmount);
                 cmd.Parameters.AddWithValue("@station_id", stationID);
 
-                int count = 0;
-                using (var reader = cmd.ExecuteReader())
+                if (queue.Count <= 2)
                 {
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        latestFeedback[count] = new approvedFeedback(reader.GetString(0), reader.GetString(1), reader.GetDateTime(2));
-                        count++;
+                        count = 0;
+                        while (reader.Read())
+                        {
+                            latestFeedback[count] = new approvedFeedback(reader.GetString(0), reader.GetString(1), reader.GetDateTime(2));
+                            count++;
+                        }
+                        queue.AddRange(latestFeedback);
                     }
                 }
 
-                reviewContent1.Text = latestFeedback[currentFeedback].small_story;
-                reviewer1.Text = latestFeedback[currentFeedback].name;
-                date1.Text = latestFeedback[currentFeedback].date_posted.ToString("dd/MM");
+                reviewContent1.Text = queue.First().small_story;
+                reviewer1.Text = queue.First().name;
+                date1.Text = queue.First().date_posted.ToString("dd/MM");
 
                 if (count <= 1)
                 {
@@ -174,20 +178,17 @@ namespace NSdisplay
 
                 reviewContainer.BeginAnimation(MarginProperty, reviewAnimation);
 
-                currentFeedback = nextFeedback;
+                reviewContent2.Text = queue[1].small_story;
+                reviewer2.Text = queue[1].name;
+                date2.Text = queue[1].date_posted.ToString("dd/MM");
 
-                if (nextFeedback >= count - 1) nextFeedback = 0;
-                else nextFeedback++;
-
-                reviewContent2.Text = latestFeedback[nextFeedback].small_story;
-                reviewer2.Text = latestFeedback[nextFeedback].name;
-                date2.Text = latestFeedback[nextFeedback].date_posted.ToString("dd/MM");
-
-                reviewContent1.Text = latestFeedback[currentFeedback].small_story;
-                reviewer1.Text = latestFeedback[currentFeedback].name;
-                date1.Text = latestFeedback[currentFeedback].date_posted.ToString("dd/MM");
+                reviewContent1.Text = queue.First().small_story;
+                reviewer1.Text = queue.First().name;
+                date1.Text = queue.First().date_posted.ToString("dd/MM");
 
                 await Task.Delay(TimeSpan.FromSeconds(3));
+
+                queue.RemoveAt(0);
             }
         }
     }
