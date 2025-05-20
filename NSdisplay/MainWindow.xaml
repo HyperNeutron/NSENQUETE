@@ -32,7 +32,7 @@
             <TextBlock x:Name="clock" Margin="1,0,0,0" Foreground="#000066">16:00</TextBlock>
         </Viewbox>
         <Viewbox Grid.Row="0" Grid.Column="3" Grid.ColumnSpan="3" HorizontalAlignment="Right">
-            <TextBlock x:Name="weather" Margin="30,0,0,0" Foreground="#000066">12 °c⛅</TextBlock>
+            <TextBlock x:Name="weather" Margin="30,0,0,0" Foreground="#000066">? °c</TextBlock>
         </Viewbox>
         <Grid x:Name="reviewContainer" Width="{Binding Path= Width, ElementName= window, Converter={StaticResource DoubleWidth}}" Margin="0,0,0,20" Grid.Row="1" Grid.RowSpan="3" Grid.ColumnSpan="5">
             <Grid.ColumnDefinitions>

@@ -112,14 +112,20 @@ namespace NSdisplay
         {
             while (true)
             {
-                WeatherReport currentWeather = new();
-                HttpResponseMessage response = await client.GetAsync("forecast?latitude=52.374&longitude=4.8897&current=temperature_2m,weather_code&timezone=Europe%2FBerlin");
-                if (response.IsSuccessStatusCode)
-                {
-                    currentWeather = await response.Content.ReadAsAsync<WeatherReport>();
+                try {
+                    WeatherReport currentWeather = new();
+                    HttpResponseMessage response = await client.GetAsync("forecast?latitude=52.374&longitude=4.8897&current=temperature_2m,weather_code&timezone=Europe%2FBerlin");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        currentWeather = await response.Content.ReadAsAsync<WeatherReport>();
+                    }
+                    weather.Text = $"{currentWeather.current.temperature_2m} °c {weatherIcons[currentWeather.current.weather_code]}";
+                    await Task.Delay(TimeSpan.FromMinutes(1));
                 }
-                weather.Text = $"{currentWeather.current.temperature_2m} °c {weatherIcons[currentWeather.current.weather_code]}";
-                await Task.Delay(TimeSpan.FromMinutes(1));
+                catch (HttpRequestException)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
             }
         }
 
