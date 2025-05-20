@@ -20,15 +20,15 @@ namespace NSdisplay
             {
                 con.Open();
             }
-            catch (MySqlException exception)
+            catch (MySqlException)
             {
-                MessageBox.Show("Database niet verbonden" , "Error");
+                MessageBox.Show("Database niet verbonden", "Error");
                 App.Current.Shutdown();
                 return;
             }
             InitializeComponent();
             var stations = new List<Station>();
-            var query = "SELECT id, name FROM netherlands_train_stations";
+            var query = "SELECT id, name FROM stations";
             var cmd = new MySqlCommand(query, con);
             var reader = cmd.ExecuteReader();
             while (reader.Read())
@@ -68,7 +68,7 @@ namespace NSdisplay
 
         private bool isValidStation(int id)
         {
-            var query = "SELECT * FROM netherlands_train_stations WHERE id = @id";
+            var query = "SELECT * FROM stations WHERE id = @id";
             var cmd = new MySqlCommand(query, con);
             cmd.Parameters.AddWithValue("@id", id);
             var reader = cmd.ExecuteReader();
