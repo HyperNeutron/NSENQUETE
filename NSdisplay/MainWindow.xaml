@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:NSdisplay"
         mc:Ignorable="d"
         FontFamily="Bahnschrift"
-        Title="MainWindow" 
+        Title="NS Enquête Display" 
         Height="1080" Width="1920"
         WindowState="Maximized" WindowStyle="None">
     <Window.Resources>
